@@ -1,0 +1,107 @@
+import java.util.Scanner;
+class AtmDemo
+	{
+		public static void main(String[] args)
+		{
+		ATM obj1=new ATM();
+		obj1.checkPin();
+		obj1.menu();
+		ATM obj2=new ATM();
+		obj2.menu();
+		}
+	}
+
+class ATM
+{	
+	float Balance;
+	public void checkPin()
+	{
+  	int PIN=8907;
+	Scanner sc=new Scanner(System.in);
+	System.out.println("ENTER THE PIN: ");
+	int enteredPin=sc.nextInt();
+	if(enteredPin==PIN)
+	{
+		menu();
+	}
+	else
+	{
+		System.out.println("WRONG PIN WAS ENTERED BY THE USER!!!");
+	}
+	}
+    public void menu()
+	{
+	
+		System.out.println("\nENTER YOUR CHOICE: ");
+		System.out.println("1.CHECK YOUR BANK BALANCE ");
+		System.out.println("2.WITHDRAW MONEY");
+		System.out.println("3.DEPOSIT MONEY");
+		System.out.println("4.Exit");
+		Scanner sco=new Scanner(System.in);
+		int option=sco.nextInt();
+		if(option==1)
+		{
+			checkBalance();
+		}
+		else if(option==2)
+		{
+			withdrawMoney();
+		}
+		else if(option==3)
+		{
+			depositMoney();
+		}
+		else if(option==4)
+		{
+			exit();
+		}
+		else
+		{
+			System.out.println("INVALID INPUT BY USER");
+		}
+	}
+public void checkBalance()
+	{
+		System.out.println("YOUR BANK BALANCE IS " +Balance);
+		menu();
+	}
+public void withdrawMoney()
+	{
+		System.out.println("YOUR BANK BALANCE IS "+Balance);
+		System.out.println("ENTER THE AMOUNT TO WITHDRAW");
+		Scanner sca=new Scanner(System.in);
+		float withdraw=sca.nextFloat();
+		if(Balance<withdraw)
+		{
+			System.out.println("INVALID BALANCE");
+		}
+		else
+		{
+			Balance=Balance-withdraw;
+			System.out.println("WITHDRAWL SUCCESSFUL!!!");
+			System.out.println("THE BALANCE AFTER WITHDRAWL IS: " +Balance);
+		}
+	        menu();
+	}
+public void depositMoney()
+	{
+		Scanner scd=new Scanner(System.in);
+		System.out.println("ENTER THE AMOUNT TO BE DEPOSITED");
+		float deposit=scd.nextFloat();
+		Balance=Balance+deposit;
+		System.out.println("THE MONEY DEPOSITED SUCCESSFULLY!!!");
+		System.out.println("THE BALANCE AFTER DEPOSITING THE MONEY IS " +Balance);
+		menu();
+	}
+public void exit()
+	{
+		System.out.println("EXIT THE ATM!!!");
+	}
+}
+
+
+		
+		
+		
+		
+		
