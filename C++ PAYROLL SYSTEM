@@ -1,0 +1,261 @@
+//PAYROLL MANAGRMENT SYSTEM
+#include <iostream>
+using namespace std;
+
+class Employee
+{
+private:
+    int ecode;
+    char ename[20];
+    char eaddress[40];
+    char e_join_date[20];
+    char e_designation[10];
+    int days;
+    float basic;
+
+public:
+    void add_employee();
+    void modify_rec();
+    void display_rec();
+    void delete_rec(Employee*,int& , int);
+    void salary_slip(int);
+};
+
+void Employee::add_employee()
+{
+    
+	cout << "\n*********ENTER RECORD OF EMPLOYEE********" << endl;
+    cout << "ENTER EMPLOYEE CODE: ";
+    cin >> ecode;
+
+	fflush(stdin);
+    cout << "ENTER THE NAME OF EMPLOYEE: ";
+    cin.getline(ename, 20);
+
+    cout << "ENTER THE ADDRESS OF EMPLOYEE: ";
+    cin.getline(eaddress, 40);
+
+    cout << "ENTER THE JOINING DATE OF EMPLOYEE(DD/MM/YYYY): ";
+    cin.getline(e_join_date, 20);
+
+    cout << "ENTER THE DESIGNATION OF EMPLOYEE: ";
+    cin.getline(e_designation, 10);
+
+    cout << "ENTER THE NO. OF DAYS WORKED: ";
+    cin >> days;
+
+    cout << "ENTER THE BASIC SALARY: ";
+    cin >> basic;
+}
+
+void Employee::modify_rec()
+{
+    int m_rec;
+    cout << "\nPLEASE ENTER THE ECODE OF EMPLOYEE WHOSE RECORD IS TO BE MODIFIED: ";
+    cin >> m_rec;
+
+    if (ecode == m_rec)
+    {
+    	fflush(stdin);
+        cout << "ENTER NEW EMPLOYEE NAME: ";
+        cin.getline(ename, 20);
+
+        cout << "ENTER ADDRESS OF NEW EMPLOYEE: ";
+        cin.getline(eaddress, 40);
+
+        cout << "ENTER NEW JOINING DATE OF EMPLOYEE: ";
+        cin.getline(e_join_date, 20);
+
+        cout << "ENTER NEW DESIGNATION OF EMPLOYEE: ";
+        cin.getline(e_designation, 10);
+    }
+    else
+    {
+    	cout<<"SORRY WRONG EMPNO ADDED";
+	}
+}
+
+
+void Employee::display_rec()
+{
+    
+    cout << "\n\n******THE RECORD IS********" << endl;
+    cout << "EMPLOYEE CODE: " << ecode << endl;
+    cout << "NAME OF EMPLOYEE: " << ename << endl;
+    cout << "ADDRESS OF EMPLOYEE: " << eaddress << endl;
+    cout << "JOINING DATE OF EMPLOYEE: " << e_join_date << endl;
+    cout << "DESIGNATION OF EMPLOYEE: " << e_designation << endl;
+    cout << "NO. OF DAYS WORKED BY EMPLOYEE: " << days << endl;
+    cout << "BASIC SALARY OF EMPLOYEE: " << basic << endl;
+}
+
+
+
+
+
+void Employee::delete_rec(Employee employees[],int &numemployee,int demp)
+{
+	int found=-1;
+	for(int i=0;i<numemployee;i++)
+	{
+		if(employees[i].ecode==demp)
+		{
+			char out;
+			cout<<"DO YOU REALLY WANT TO DELETE RECORD(Y|N): "<<endl;
+			cin>>out;
+				if(out=='Y')
+				{
+					found=i;
+					break;
+				}
+		
+		}
+
+	}	
+	if(found !=-1)
+	{
+		
+        for (int i = found; i < numemployee - 1; i++) 
+		{
+            employees[i] = employees[i + 1];
+        }
+        numemployee--; // Decrement the number of employees
+        
+		cout << "EMPLOYEE RECORD WITH ECODE " << demp << " DELETED SUCESSFULLY." << endl;
+    } 
+	else 
+	{
+        cout << "EMPLOYEE WITH ECODE  " << demp << "NOT FOUND." << endl;
+    }
+}
+
+void Employee::salary_slip(int ec)
+{
+	if(ecode==ec)
+	{
+		
+	cout<<"***********PAYROLL OF EMPLOYEE*************"<<endl;
+	cout<<"PLEASE ENTER YOUR BASIC SALARY: "<<endl;
+	cin>>basic;
+	
+	
+	if(basic<=10000)
+	{
+		int med,hrent,tax,total_sal;
+		med=basic*7/100;
+		hrent=basic*10/100;
+		tax=basic*5/100;
+		cout<<"YOUR MEDICAL ALLOWANCE IS: "<<med<<endl;
+		cout<<"YOUR HOUSE RENT IS: "<<hrent<<endl;
+		cout<<"YOUR TAX IS: "<<tax<<endl;
+		total_sal=(basic+med+hrent)-tax;
+		cout<<"YOUR TOTAL SALARY IS: "<<total_sal<<endl;
+	}
+	else if(basic>=10000 && basic<=20000)
+	{
+		int med,hrent,tax,total_sal;
+		med=basic*10/100;
+		hrent=basic*15/100;
+		tax=basic*8/100;
+		cout<<"YOUR MEDICAL ALLOWANCE IS: "<<med<<endl;
+		cout<<"YOUR HOUSE RENT IS: "<<hrent<<endl;
+		cout<<"YOUR TAX IS: "<<tax<<endl;
+		total_sal=(basic+med+hrent)-tax;
+		cout<<"YOUR TOTAL SALARY IS: "<<total_sal<<endl;
+	}
+	else
+	{
+	int med,hrent,tax,total_sal;
+		med=basic*15/100;
+		hrent=basic*20/100;
+		tax=basic*10/100;
+		cout<<"YOUR MEDICAL ALLOWANCE IS: "<<med<<endl;
+		cout<<"YOUR HOUSE RENT IS: "<<hrent<<endl;
+		cout<<"YOUR TAX IS: "<<tax<<endl;
+		total_sal=(basic+med+hrent)-tax;
+		cout<<"YOUR TOTAL SALARY IS: "<<total_sal<<endl;
+	}
+}
+}
+
+
+	
+int main()
+{
+    const int MAX_EMPLOYEES = 100; // Maximum number of employees
+    Employee employees[MAX_EMPLOYEES]; // Array to store employee records
+    int numEmployees = 0; // Number of employees currently stored
+
+    while (true)
+    {
+        cout << "\n\n********MAIN MENU*********" << endl;
+        cout << "1.ENTER NEW EMPLOYEE RECORD" << endl;
+        cout << "2.MODIFY EMPLOYEE RECORD" << endl;
+        cout << "3.DISPLAY EMPLOYEE RECORDS" << endl;
+		cout << "4.SALARY SLIP"<<endl;
+		cout << "5.DELETE THE RECORD"<<endl;
+		cout << "6.EXIT FROM THE PROGRAM"<<endl;
+		cout<<"******************************"<<endl;
+        int option;
+        cout << "\nPLEASE ENTER YOUR CHOICE: ";
+        cin >> option;
+
+        switch (option)
+        {
+        case 1:
+            if (numEmployees < MAX_EMPLOYEES)
+            {
+                employees[numEmployees].add_employee();
+                numEmployees++;
+            }
+            else
+            {
+                cout << "MAXIMUM NUMBER OF EMPLOYEES REACHED!" << endl;
+            }
+            break;
+        case 2:
+        	for (int i = 0; i < numEmployees; i++)
+            {
+                employees[i].modify_rec();
+            }
+            break;
+        case 3:
+            for (int i = 0; i < numEmployees; i++)
+            {
+                employees[i].display_rec();
+            }
+            break;
+        case 4:
+            int ec;
+        	cout<<"PLEASE ENTER THE ECODE OF EMPLOYEE WHOOSE SALARY SLIP IS TO BE DISPLAYED: "<<endl;
+        	cin>>ec;
+        	 for (int i = 0; i < numEmployees; i++)
+            	{
+            	
+                	employees[i].salary_slip(ec);
+                	
+            	}
+            	break;
+        case 5:
+        	int demp;
+        	 cout<<"ENTER THE ECODE OF EMPLOYEE WHOOSE RECORD IS TO BE DELETED: "<<endl;
+        	 cin>>demp;
+        	 for (int i = 0; i < numEmployees; i++)
+            	{
+            		
+                	employees[i].delete_rec(employees,numEmployees,demp);
+                	
+            	}
+            	break;
+        case 6:
+        	cout<<"********EXIT THE PROGRAM*******";
+        	exit(0);
+        	break;
+        	
+    	default:
+            cout << "INVALID OPTION!!!" << endl;
+        }
+    }
+
+    return 0;
+}
