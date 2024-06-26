@@ -1,0 +1,265 @@
+#include<iostream>
+#include<fstream>
+#include<cstring>
+#include<stdlib.h>
+
+using namespace std;
+
+
+class studentRecord 
+{
+	private:
+    	int admno;
+    	int rollno;
+    	char name[20];
+    	char branch[20];
+    	float cgpa;
+
+	public:
+    	void getData();
+    	void displayData();
+    	void update_rec();
+    	void search_rec();
+    	void delete_rec();
+};
+
+
+
+void studentRecord::getData() {
+    cout << "******THE DATA OF THE STUDENT IS TO BE ENTERED******" << endl;
+    
+    //CREATING AN OBJECT OF OFSTREAM CLASS IN ORDER TO WRITE DATA TO THE DISC GIVEN BY THE USER
+    ofstream ofobj;
+    //OPENING THE FILE USING CONSTRUCTOR APPROACH FOR WRITTING DATA TO TEXT FILE
+    ofobj.open("project.txt", ios::app); 
+
+	//CHECKING IF THE FILE OBJECT CREATED OR IS FACING SOME ERROR
+    if (!ofobj) 
+	{
+        cout << "FAILED TO OPEN check_me.txt FOR WRITTING!" << endl;
+        return;
+    }
+
+    cout << "PLEASE ENTER THE ADMISSION NUMBER OF STUDENT: ";
+    cin >> admno;
+
+    cout << "PLEASE ENTER THE ROLL NUMBER OF STUDENT: ";
+    cin >> rollno;
+
+    cout << "PLEASE ENTER THE NAME OF STUDENT: ";
+    fflush(stdin);
+    cin.getline(name, 20);
+
+    cout << "PLEASE ENTER THE BRANCH OF STUDENT: ";
+    cin.getline(branch, 20);
+
+
+    cout << "PLEASE ENTER THE CGPA OF STUDENT: ";
+    cin >> cgpa;
+   
+   //THROUGH THE OBJECT OF OFSTREAM CLASS ALL THE DATA HAS BEEN WRITTEN ON THE FILE(check_me.txt)
+   ofobj<< admno<<" "<<rollno<<" "<<name<<" "<<branch<<" "<<cgpa;
+   
+	//CLOSE THE FILE
+    ofobj.close();
+}
+
+void studentRecord::displayData()
+ {
+    cout << "*****THE DATA IS DISPLAYED******" << endl;
+    //CREATING AN OBJECT OF IFSTREAM CLASS IN ORDER TO READ DATA FROM DISC
+    ifstream fin;
+    //OPENING THE FILE USING OBJECT OF IFSTREAM CLASS TO PERFORM READING ON DATA 
+    fin.open("project.txt", ios::in);
+
+    
+    //CHECKING IF THE FILE OBJECT CREATED OR IS FACING SOME ERROR
+	if(!fin)
+    {
+    	cout<<"\nFILE CANNOT BE OPENED FOR READING";
+
+	}
+	char word[5];
+    
+    while(fin)
+	{
+		//GETLINE IS A BUILT IN FUNCTION OF IFSTREAM CLASS TO READ DATA LINE BY LINE
+		fin>>word;
+		
+		//IF FILE OBJECT REACHES END OF FILE THAN BREAK AND COME OUT OF THE LOOP
+		if(fin.eof())
+			break;
+		
+		cout<<word<<" "<<endl;		
+	 } 
+	
+	//CLOSING THE FILE AFTER DISPLAYING THE DATA ON CONSOLE FROM DISC
+    fin.close();
+}
+void studentRecord::search_rec()
+{
+
+	//CREATING AN OBJECT OF IFSTREAM CLASS IN ORDER TO READ DATA FROM DISC 
+    ifstream ifin("project.txt", ios::in);
+
+	//CHECKING IF THE FILE OBJECT CREATED OR IS FACING SOME ERROR
+    if (!ifin) 
+	{
+        cout << "FILE CANNOT BE OPENED" << endl;
+        return;
+    }
+
+    int search_admno;
+    cout << "PLEASE ENTER THE ADMISSION NUMBER OF STUDENT WHOSE RECORD IS TO BE FETCHED: ";
+    cin >> search_admno;
+
+    bool found = false;
+    
+    //WHILE READING DATA
+    while (ifin >> admno >> rollno >> name >> branch >> cgpa)
+	 {
+        if (admno == search_admno) 
+		{
+            found = true;
+            cout << "******RECORD FOUND******:" << endl;
+            cout << "ADMISSION NUMBER: " << admno << endl;
+            cout << "ROLL NUMBER: " << rollno << endl;
+            cout << "NAME: " << name << endl;
+            cout << "BRANCH: " << branch << endl;
+            cout << "CGPA: " << cgpa << endl;
+            break; 
+        }
+    }
+
+    if (!found) 
+	{
+        cout << "RECORD WITH ADMISSION NUMBER " << search_admno << " NOT FOUND!" << endl;
+    }
+    //CLOSE FILE
+	ifin.close();
+}
+void studentRecord::update_rec()
+{
+    ifstream read("project.txt", ios::in);
+    ofstream write("project_temp.txt", ios::out);
+    
+    if (!read || !write)
+    {
+        cout << "FILE CANNOT BE OPENED" << endl;
+        return;
+    }
+
+    int check_rno;
+    cout << "PLEASE ENTER ROLL NUMBER OF THE STUDENT WHOSE RECORD IS TO BE UPDATED: ";
+    cin >> check_rno;
+    cin.ignore(); // Ignore newline character left in the buffer
+    
+    while (read >> admno >> rollno >> name >> branch >> cgpa)
+    {
+        if (check_rno == rollno)
+        {
+            cout << "******UPDATE RECORD*****" << endl;
+            cout << "ENTER NEW ADMNO: ";
+            cin >> admno;
+            
+            cin.ignore(); // Ignore newline character left in the buffer
+            cout << "ENTER NEW NAME: ";
+            cin.getline(name, 20);
+            
+            cout << "ENTER NEW BRANCH: ";
+            cin.getline(branch, 20);
+            
+            cout << "ENTER NEW CGPA: ";
+            cin >> cgpa;
+        }
+
+        // Write the updated record to the temporary file
+        write << admno << " " << rollno << " " << name << " " << branch << " " << cgpa << endl;
+    }
+    
+    read.close();
+    write.close();
+    
+    // Remove the original file and rename the temporary file
+    remove("project.txt");
+    rename("project_temp.txt", "project.txt");
+}
+
+void studentRecord::delete_rec()
+ {
+ 	//CREATING AN OBJECT OF IFSTREAM CLASS FOR READING DATA FROM ORIGNAL FILE AND AN OBJECT OF OFSTREAM CLASS FOR CREATING A NEW FILE WITH NON DELETED RECORDS
+    ifstream iff("project.txt", ios::in);
+    ofstream of("project_temp.txt", ios::out);
+
+    int del_rno;
+    bool found = false;
+
+    cout << "PLEASE ENTER THE ROLL NO OF STUDENT WHOSE RECORD IS TO BE DELETED: ";
+    cin >> del_rno;
+
+    while (iff >> admno >> rollno >> name >> branch >> cgpa)
+	 {
+        if (del_rno == rollno) 
+		{
+            found = true;
+            cout << "Record deleted successfully." << endl;
+        } 
+		else 
+		{
+            of << admno << " " << rollno << " " << name << " " << branch << " " << cgpa << endl;
+        }
+    }
+
+    if (!found) 
+	{
+        cout << "No record found with roll number " << del_rno << endl;
+    }
+
+    iff.close();
+    of.close();
+
+    // Remove the original file and rename the temporary file
+    remove("project.txt");
+    rename("project_temp.txt", "project.txt");
+}
+
+
+
+int main() 
+{
+	studentRecord s;
+	while(true)
+	{
+	cout<<"*******MAIN MENU********"<<endl;
+	cout<<"1.*******CREATE STUDENT RECORDS*******"<<endl;
+	cout<<"2.*******DISPLAY STUDENT RECORDS*******"<<endl;
+	cout<<"3.*******SEARCH STUDENT RECORDS*******"<<endl;
+	cout<<"4.*******UPDATE STUDENT RECORDS*******"<<endl;
+	cout<<"5.*******DELETE  STUDENT RECORDS*******"<<endl;
+	int option;
+	cout<<"PLEASE ENTER YOUR CHOICE: "<<endl;
+	cin>>option;
+	switch(option)
+	{
+		case 1:
+			s.getData();
+			break;
+		case 2:
+			s.displayData();
+			break;
+		case 3:
+			s.search_rec();
+			break;
+		case 4:
+			s.update_rec();
+			break;
+		case 5:
+			s.delete_rec();
+			
+	}
+}
+    
+    
+    return 0;
+}
+
